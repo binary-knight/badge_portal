@@ -8,7 +8,7 @@ import config from './amplifyconfiguration.json';
 Amplify.configure(config);
 
 // Replace with your actual TinyURL API key
-const TINYURL_API_KEY = "";
+const TINYURL_API_KEY = process.env.TINY_API;
 
 function ListComponent({ user, refreshTrigger }) {
   const [files, setFiles] = useState([]);
