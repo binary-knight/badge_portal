@@ -1,0 +1,85 @@
+/* Reset basic styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e6f2ff; /* Light blue background */
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  
+  header {
+    background: #009999; /* Teal green */
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Styling the file input and upload button */
+  input[type='file'] {
+    border: 2px solid #009999; /* Teal green border */
+    padding: 8px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  
+  button {
+    background-color: #006699; /* Darker blue */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #004466; /* Even darker blue */
+  }
+  
+  /* Link styles */
+  a {
+    color: #006699;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Displaying upload results */
+  .result {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #ccffcc; /* Light green */
+    border: 1px solid #009900; /* Green */
+    border-radius: 5px;
+  }
+  
+  .error {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #ffcccc; /* Light red */
+    border: 1px solid #990000; /* Red */
+    border-radius: 5px;
+  }
+  

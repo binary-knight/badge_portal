@@ -1,0 +1,12 @@
+{
+  "resourceName": "s3badgestorage",
+  "bucketName": "badge-storage",
+  "policyUUID": "372fd2ac",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}

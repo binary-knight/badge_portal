@@ -1,0 +1,23 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-badgeportal-staging-153807-authRole",
+      "UnauthRoleArn": "arn:aws:iam::606424263901:role/amplify-badgeportal-staging-153807-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::606424263901:role/amplify-badgeportal-staging-153807-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-badgeportal-staging-153807-deployment",
+      "UnauthRoleName": "amplify-badgeportal-staging-153807-unauthRole",
+      "StackName": "amplify-badgeportal-staging-153807",
+      "StackId": "arn:aws:cloudformation:us-east-1:606424263901:stack/amplify-badgeportal-staging-153807/d830b5c0-eb86-11ee-af35-12b8955448bb",
+      "AmplifyAppId": "d24op1rqg51fwy"
+    },
+    "categories": {
+      "auth": {
+        "BadgePortal": {}
+      },
+      "storage": {
+        "s3badgestorage": {}
+      }
+    }
+  }
+}
