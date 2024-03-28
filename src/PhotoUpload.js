@@ -32,8 +32,12 @@ function PhotoUpload({ user, onUploadSuccess }) {
       }).result;
       setUploadResult('Upload Succeeded: ' + filename);
       onUploadSuccess();
+  
+      // Clear the success message after 5 seconds
+      setTimeout(() => setUploadResult(''), 5000);
     } catch (error) {
       setUploadError('Error: ' + error);
+      // Optionally clear the error in a similar way
     }
   };
 
@@ -41,7 +45,7 @@ function PhotoUpload({ user, onUploadSuccess }) {
     <div>
       <input type="file" accept="image/*" onChange={handleChange} />
       <button onClick={handleUpload}>Upload</button>
-      {uploadResult && <p>{uploadResult}</p>}
+      {uploadResult && <div className="toast-message">{uploadResult}</div>}
       {uploadError && <p>{uploadError}</p>}
     </div>
   );
