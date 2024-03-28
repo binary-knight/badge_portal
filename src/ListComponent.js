@@ -44,7 +44,6 @@ function ListComponent({ user, refreshTrigger }) {
 
   const shortenUrl = async (url) => {
     const tinyURLApiKey = process.env.REACT_APP_TINYURL_API_KEY;
-    console.log('API Response: ', tinyURLApiKey)
     try {
       const response = await fetch('https://api.tinyurl.com/create', {
         method: 'POST',
@@ -55,7 +54,6 @@ function ListComponent({ user, refreshTrigger }) {
         body: JSON.stringify({ url })
       });
       const data = await response.json();
-      console.log('TinyURL response:', data.data.tiny_url); // Log the response for debugging
       return data.data.tiny_url; // Ensure this matches the TinyURL response structure
     } catch (error) {
       console.error('Error shortening URL:', error);
