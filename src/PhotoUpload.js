@@ -22,18 +22,26 @@ function PhotoUpload({ user, onUploadSuccess }) {
       setUploadError("No file selected");
       return;
     }
-    
+  
+    // Check the file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError("Invalid file type. Only JPEG, JPG, and PNG files are allowed.");
+      return;
+    }
+  
     const filename = `${user.username}-${Date.now()}-${file.name}`;
-
+  
     try {
       const result = await uploadData({
         key: filename,
-        data: file
-      }).result;
-      setUploadResult('Succeeded: ' + result);
-      onUploadSuccess();
+        data: file,
+        contentType: file.type, 
+      });
+      setUploadResult('Succeeded: ' + result.key);
+      onUploadSuccess();  
     } catch (error) {
-      setUploadError('Error: ' + error);
+      setUploadError('Error: ' + error.message);
     }
   };
 
