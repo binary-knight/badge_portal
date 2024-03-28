@@ -24,22 +24,24 @@ function PhotoUpload({ user, onUploadSuccess }) {
     }
     
     const filename = `${user.username}-${Date.now()}-${file.name}`;
-
-    try {
-      const result = await uploadData({
-        key: filename,
-        data: file
-      }).result;
-      setUploadResult('Upload Succeeded: ' + filename);
-      onUploadSuccess();
   
-      // Clear the success message after 5 seconds
-      setTimeout(() => setUploadResult(''), 5000);
-    } catch (error) {
-      setUploadError('Error: ' + error);
-      // Optionally clear the error in a similar way
-    }
-  };
+    try {
+    const result = await uploadData({
+      key: filename,
+      data: file,
+      options: {
+        contentType: file.type, // Set the correct content type
+      }
+    });
+    setUploadResult('Upload Succeeded: ' + filename); // Adjust this line based on the actual response
+    onUploadSuccess();
+
+    // Clear the success message after 5 seconds
+    setTimeout(() => setUploadResult(''), 5000);
+  } catch (error) {
+    setUploadError('Error: ' + error.message);
+  }
+};
 
   return (
     <div>

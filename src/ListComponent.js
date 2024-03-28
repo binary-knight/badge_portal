@@ -63,7 +63,7 @@ function ListComponent({ user, refreshTrigger }) {
 
   const copyToClipboard = (url) => {
     navigator.clipboard.writeText(url).then(() => {
-      alert('URL copied to clipboard');
+      alert('URL copied to clipboard, now paste it in the url field of the badge creator');
     }).catch(err => {
       console.error('Error copying URL to clipboard:', err);
     });
