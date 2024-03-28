@@ -7,8 +7,6 @@ import '@aws-amplify/ui-react/styles.css';
 import config from './amplifyconfiguration.json';
 Amplify.configure(config);
 
-// Replace with your actual TinyURL API key
-const TINYURL_API_KEY = process.env.TINY_API;
 
 function ListComponent({ user, refreshTrigger }) {
   const [files, setFiles] = useState([]);
@@ -45,12 +43,14 @@ function ListComponent({ user, refreshTrigger }) {
   };
 
   const shortenUrl = async (url) => {
+    const tinyURLApiKey = process.env.REACT_APP_TINYURL_API_KEY;
+    console.log('API Response: ', tinyURLApiKey)
     try {
       const response = await fetch('https://api.tinyurl.com/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${TINYURL_API_KEY}`
+          'Authorization': `Bearer ${tinyURLApiKey}`
         },
         body: JSON.stringify({ url })
       });
