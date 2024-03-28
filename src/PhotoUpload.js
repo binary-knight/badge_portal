@@ -30,7 +30,7 @@ function PhotoUpload({ user, onUploadSuccess }) {
         key: filename,
         data: file
       }).result;
-      setUploadResult('Succeeded: ' + result);
+      setUploadResult('Upload Succeeded: ' + filename);
       onUploadSuccess();
     } catch (error) {
       setUploadError('Error: ' + error);
