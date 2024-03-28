@@ -13,10 +13,13 @@ function ListComponent({ user, refreshTrigger }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchFiles();
+    setTimeout(() => {
+      fetchFiles();
+    }, 3000); // Delay of 3 seconds
   }, [user, refreshTrigger]);
 
   const fetchFiles = async () => {
+    console.log("Fetching files..."); // Debugging
     try {
       const usernamePrefix = user.username;
       const listResult = await list({ prefix: usernamePrefix });
