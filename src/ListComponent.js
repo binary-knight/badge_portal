@@ -15,11 +15,10 @@ function ListComponent({ user, refreshTrigger }) {
   useEffect(() => {
     setTimeout(() => {
       fetchFiles();
-    }, 3000); // Delay of 3 seconds
+    }, 3000); // Delay of 3 seconds due to AWS S3 latency
   }, [user, refreshTrigger]);
 
   const fetchFiles = async () => {
-    console.log("Fetching files..."); // Debugging
     try {
       const usernamePrefix = user.username;
       const listResult = await list({ prefix: usernamePrefix });
@@ -74,7 +73,6 @@ function ListComponent({ user, refreshTrigger }) {
 
   const handleDeleteSuccess = (deletedFilename) => {
     setFiles(files => files.filter(file => file.key !== deletedFilename));
-    // Optionally, you can trigger a message that file was deleted
   };
 
   return (

@@ -33,7 +33,7 @@ function PhotoUpload({ user, onUploadSuccess }) {
         contentType: file.type, // Set the correct content type
       }
     });
-    setUploadResult('Upload Succeeded: ' + filename); // Adjust this line based on the actual response
+    setUploadResult('Upload Succeeded: ' + filename);
     onUploadSuccess();
 
     // Clear the success message after 5 seconds
