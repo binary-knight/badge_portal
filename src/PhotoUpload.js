@@ -30,37 +30,54 @@ function PhotoUpload({ user, onUploadSuccess }) {
     const filename = `${user.username}-${Date.now()}-${file.name}`;
   
     try {
-      const uploadResult = await uploadData({
+      const uploadTask = await uploadData({
         key: filename,
         data: file,
-        options: { contentType: file.type } // Set the correct content type
+        options: { 
+          contentType: file.type,
+          acl: 'public-read'
+         }
       });
   
-      // Generate a TinyURL
-      const fileUrl = `https://${uploadResult.key}`; // Construct the file URL
-      const tinyUrl = await shortenUrl(fileUrl);
+      const uploadResult = await uploadTask.result;
   
-      // Create a TinyURLMapping item using GraphQL API
-      const client = generateClient();
-      const newMapping = { fileKey: filename, tinyUrl: tinyUrl };
+      // Check the state after the result promise resolves
+      if (uploadTask.state === 'SUCCESS') {
+        // Construct the S3 file URL
+        const bucketName = config.aws_user_files_s3_bucket; // Your S3 bucket name
+        const region = config.aws_project_region; // Your AWS region
+        const fileUrl = `https://${bucketName}.s3.${region}.amazonaws.com/public/${uploadResult.key}`;
   
-      await client.graphql({
-        query: mutations.createTinyURLMapping,
-        variables: { input: newMapping }
-      });
+        const tinyUrl = await shortenUrl(fileUrl);
   
-      setUploadResult('Upload Succeeded: ' + filename);
-      onUploadSuccess();
+        // Create a TinyURLMapping item using GraphQL API
+        const newMapping = { fileKey: filename, tinyUrl: tinyUrl };
+        console.log("Storing TinyURL mapping:", newMapping);
+  
+        await client.graphql({
+          query: mutations.createTinyURLMapping,
+          variables: { input: newMapping }
+        });
+  
+        setUploadResult('Upload Succeeded: ' + filename);
+        onUploadSuccess();
+      } else {
+        // Handle incomplete or failed upload
+        console.error('Upload did not complete:', uploadTask);
+        setUploadError('Upload did not complete');
+      }
   
       // Clear the success message after 5 seconds
       setTimeout(() => setUploadResult(''), 5000);
     } catch (error) {
+      console.error('Error during upload:', error);
       setUploadError('Error: ' + error.message);
     }
   };
 
   const shortenUrl = async (url) => {
-    const tinyURLApiKey = process.env.REACT_APP_TINYURL_API_KEY;
+    const tinyURLApiKey = process.env.REACT_APP_TINYURL_API_KEY
+    console.log("Generating TinyURL for:", url);
     try {
       const response = await fetch('https://api.tinyurl.com/create', {
         method: 'POST',

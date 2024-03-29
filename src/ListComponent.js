@@ -34,6 +34,7 @@ function ListComponent({ user, refreshTrigger }) {
           acc[mapping.fileKey] = mapping.tinyUrl;
           return acc;
         }, {});
+        console.log("Retrieved mappings:", mappings);
 
         let filesWithUrls = [];
         for (let item of listResult.items) {
