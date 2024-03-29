@@ -5,17 +5,21 @@ import { Amplify } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import config from './amplifyconfiguration.json';
+import { generateClient } from 'aws-amplify/api';
+import * as queries from './graphql/queries';
+
 Amplify.configure(config);
 
 
 function ListComponent({ user, refreshTrigger }) {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState("");
+  const client = generateClient();
 
   useEffect(() => {
     setTimeout(() => {
       fetchFiles();
-    }, 3000); // Delay of 3 seconds due to AWS S3 latency
+    }, 3000);
   }, [user, refreshTrigger]);
 
   const fetchFiles = async () => {
@@ -24,16 +28,24 @@ function ListComponent({ user, refreshTrigger }) {
       const listResult = await list({ prefix: usernamePrefix });
 
       if (listResult && Array.isArray(listResult.items)) {
-        const filesWithShortUrls = await Promise.all(listResult.items.map(async item => {
+        // Fetch the TinyURL mappings using GraphQL query via the client
+        const mappingsData = await client.graphql({ query: queries.listTinyURLMappings });
+        const mappings = mappingsData.data.listTinyURLMappings.items.reduce((acc, mapping) => {
+          acc[mapping.fileKey] = mapping.tinyUrl;
+          return acc;
+        }, {});
+
+        let filesWithUrls = [];
+        for (let item of listResult.items) {
           const getUrlResult = await getUrl({
             key: item.key,
             options: { expiresIn: 60 }
           });
-          const tinyUrl = await shortenUrl(getUrlResult.url);
-          return { key: item.key, url: getUrlResult.url, tinyUrl };
-        }));
+          const tinyUrl = mappings[item.key] || getUrlResult.url;
+          filesWithUrls.push({ key: item.key, url: getUrlResult.url, tinyUrl });
+        }
 
-        setFiles(filesWithShortUrls);
+        setFiles(filesWithUrls);
       } else {
         console.error('Unexpected structure of files:', listResult);
         setError('Failed to fetch files. Unexpected data format.');
@@ -41,25 +53,6 @@ function ListComponent({ user, refreshTrigger }) {
     } catch (err) {
       console.error('Error fetching files:', err);
       setError(`Error fetching files: ${err.message}`);
-    }
-  };
-
-  const shortenUrl = async (url) => {
-    const tinyURLApiKey = process.env.REACT_APP_TINYURL_API_KEY;
-    try {
-      const response = await fetch('https://api.tinyurl.com/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${tinyURLApiKey}`
-        },
-        body: JSON.stringify({ url })
-      });
-      const data = await response.json();
-      return data.data.tiny_url; // Ensure this matches the TinyURL response structure
-    } catch (error) {
-      console.error('Error shortening URL:', error);
-      return url; // Return the original URL in case of error
     }
   };
 
